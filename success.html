@@ -1,1 +1,107 @@
-hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Success - Google</title>
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #f1f3f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 520px;
+      margin: 60px auto;
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+    }
+    .logo {
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .logo img {
+      width: 100px;
+    }
+    .success {
+      font-size: 20px;
+      color: #34a853;
+      margin-bottom: 20px;
+    }
+    .details {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .footer {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo" onclick="downloadInvoice()">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo">
+    </div>
+    <div class="success">
+      Payment Successful<br/>
+      
+    </div>
+    <div class="details">
+      Invoice sent to <strong>monsterprince3633@gmail.com</strong><br>
+      
+      Thank you for your purchase!
+    </div>
+    <div class="footer">
+      © 2025 Google LLC. All rights reserved.
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    function downloadInvoice() {
+      const data = JSON.parse(localStorage.getItem("invoice"));
+      if (!data) return alert("Invoice data not found");
+
+      const doc = new jsPDF();
+      doc.setFont("Helvetica");
+      doc.setFontSize(18);
+      doc.setTextColor(66, 133, 244);
+      doc.text("Google Payment Invoice", 60, 20);
+
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Invoice Date: ${new Date(data.date).toLocaleDateString()}`, 20, 40);
+      doc.text(`Billed To: ${data.email}`, 20, 50);
+      doc.text(`Order ID: ${data.orderId}`, 20, 60);
+
+      let y = 80;
+      doc.setFont(undefined, 'bold');
+      doc.text("Item", 20, y);
+      doc.text("Amount (USD)", 150, y);
+      doc.setFont(undefined, 'normal');
+
+      y += 10;
+      data.items.forEach(item => {
+        doc.text(item.name, 20, y);
+        doc.text(`$${item.price.toFixed(2)}`, 150, y, { align: "right" });
+        y += 10;
+      });
+
+      doc.setFont(undefined, 'bold');
+      doc.text("Total", 20, y + 10);
+      doc.text(`$${data.total}`, 150, y + 10, { align: "right" });
+
+      doc.save("Google_Invoice.pdf");
+    }
+  </script>
+</body>
+</html>
