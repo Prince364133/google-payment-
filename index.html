@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Google Checkout - Payment</title>
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #f2f3f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 520px;
+      margin: 60px auto;
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 30px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .logo img {
+      width: 100px;
+    }
+    h2 {
+      text-align: center;
+      font-weight: 500;
+      color: #202124;
+      margin-bottom: 25px;
+    }
+    .email {
+      font-size: 14px;
+      color: #444;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      color: #5f6368;
+      font-weight: normal;
+    }
+    td:last-child {
+      text-align: right;
+    }
+    tr:not(:last-child) {
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .total {
+      font-weight: bold;
+      font-size: 16px;
+      border-top: 2px solid #ccc;
+      margin-top: 10px;
+    }
+    .order-info {
+      font-size: 13px;
+      color: #666;
+      margin: 20px 0;
+    }
+    .payment-methods {
+      text-align: center;
+      margin: 25px 0;
+    }
+    .payment-methods img {
+      height: 32px;
+      margin: 0 8px;
+    }
+    .pay-btn {
+      width: 100%;
+      background-color: #1a73e8;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .pay-btn:hover {
+      background-color: #1669c1;
+    }
+    .support {
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+      margin-top: 15px;
+    }
+    .support a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+    .secure {
+      text-align: center;
+      margin-top: 25px;
+    }
+    .secure img {
+      height: 24px;
+    }
+    .terms {
+      font-size: 11px;
+      text-align: center;
+      color: #aaa;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google">
+    </div>
+    <h2>Google Checkout</h2>
+    <div class="email">Billing to: <strong>client.business@gmail.com</strong></div>
+
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Amount (USD)</th>
+      </tr>
+      <tr>
+        <td>Cloud Run Edge Deployment</td>
+        <td>$10.50</td>
+      </tr>
+      <tr>
+        <td>BigQuery Secure Analytics Tier</td>
+        <td>$5.85</td>
+      </tr>
+      <tr>
+        <td>Cloud Logging Pro+ (Monitoring)</td>
+        <td>$8.95</td>
+      </tr>
+      <tr>
+        <td>Billing Activation Fee</td>
+        <td>$2.15</td>
+      </tr>
+      <tr class="total">
+        <td>Total</td>
+        <td>$54.50</td>
+      </tr>
+    </table>
+
+    <div class="order-info">
+      Order ID: G-39F7D3X942<br>
+      Invoice Date: June 3, 2025
+    </div>
+
+    <div class="payment-methods">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_Pay_Logo.svg" alt="Google Pay">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/UPI-Logo-vector.svg/512px-UPI-Logo-vector.svg.png" alt="UPI" style="height:28px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mastercard-logo.png" alt="Mastercard">
+    </div>
+
+    <button class="pay-btn">Pay $54.50 with UPI / Google Pay</button>
+
+    <div class="support">
+      Having issues? <a href="#">Contact Google Cloud Billing Support</a>
+    </div>
+
+    <div class="secure">
+      <img src="https://img.icons8.com/fluency/48/lock-2.png" alt="Secure">
+      <div style="font-size: 12px; color: #555;">Payment protected by Google Secure Checkout</div>
+    </div>
+
+    <div class="terms">
+      © 2025 Google LLC. All rights reserved. · Terms · Privacy · Refund Policy
+    </div>
+  </div>
+</body>
+</html>
