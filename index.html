@@ -224,8 +224,33 @@
 
   <script>
     function simulatePayment() {
-  window.location.href = "success.html"; // create this HTML page below
+  const rows = document.querySelectorAll('#invoiceBody tr');
+  const invoiceItems = [];
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll('td');
+    if (cols.length === 2) {
+      invoiceItems.push({
+        name: cols[0].innerText.trim(),
+        price: parseFloat(cols[1].innerText.replace('$', '').trim())
+      });
+    }
+  });
+
+  const totalAmount = total.toFixed(2);
+
+  const invoiceData = {
+    items: invoiceItems,
+    total: totalAmount,
+    orderId: "G-39F7D3X942",
+    email: "monsterprince3633@gmail.com",
+    date: new Date().toISOString()
+  };
+
+  localStorage.setItem('invoice', JSON.stringify(invoiceData));
+  window.location.href = "success.html";
 }
+
 
     let total = 2.00;
 
