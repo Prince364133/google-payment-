@@ -1,195 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Payment Success - Google</title>
-  <!-- Load Roboto font -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: "Roboto", sans-serif;
-      background-color: #f1f3f4;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 520px;
-      margin: 60px auto;
-      background: #fff;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-      border-radius: 12px;
-      padding: 30px;
-      text-align: center;
-    }
-    .logo {
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-    .logo img {
-      width: 100px;
-    }
-    .success {
-      font-size: 20px;
-      color: #34a853;
-      margin-bottom: 20px;
-    }
-    .details {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 30px;
-    }
-    .footer {
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 40px;
-    }
-    button {
-      background-color: #4285f4;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #3367d6;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Payment Invoice - Google</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+<style>
+  body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f1f3f4;
+    margin: 0; padding: 0;
+  }
+  .container {
+    max-width: 520px;
+    margin: 60px auto;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+  }
+  .logo {
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  .logo img {
+    width: 100px;
+  }
+  .success {
+    font-size: 22px;
+    color: #1a73e8;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .details {
+    font-size: 14px;
+    color: #202124;
+    margin-bottom: 30px;
+  }
+  .footer {
+    font-size: 12px;
+    color: #70757a;
+    margin-top: 40px;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo" onclick="downloadInvoice()">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo" />
-    </div>
-    <div class="success">
-      Payment Successful<br />
-      
-    </div>
-    <div class="details">
-      Invoice sent to <strong>monsterprince3633@gmail.com</strong><br />
-      Thank you for your purchase!
-    </div>
 
-   
-
-    <div class="footer">
-      © 2025 Google LLC. All rights reserved.
-    </div>
+<div class="container">
+  <div class="logo" onclick="downloadInvoice()">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo" />
   </div>
+  <div class="success">Payment Successful</div>
+  <div class="details">
+    Invoice sent to <strong>monsterprince3633@gmail.com</strong><br />
+    Thank you for your purchase!
+  </div>
+  <div class="footer">© 2025 Google LLC. All rights reserved.</div>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    const { jsPDF } = window.jspdf;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.min.js"></script>
 
-    function setSampleInvoiceData() {
-      const sampleData = {
-        date: new Date().toISOString(),
-        orderId: 'ORD123456789',
-        email: 'monsterprince3633@gmail.com',
-        items: [
-          { name: 'Google Workspace Basic Plan', price: 99.99 },
-          { name: 'Additional Storage', price: 19.99 },
-        ],
-        total: 119.98,
-      };
-      localStorage.setItem('invoice', JSON.stringify(sampleData));
-      alert('Sample invoice data has been saved in localStorage.\nNow click the Google logo to download the invoice PDF.');
-    }
+<script>
+  const { jsPDF } = window.jspdf;
 
-    function downloadInvoice() {
-      const data = JSON.parse(localStorage.getItem('invoice'));
-      if (!data) return alert('Invoice data not found. Please set sample data first.');
+  async function downloadInvoice() {
+    const data = JSON.parse(localStorage.getItem('invoice'));
+    if (!data) return alert('Invoice data not found in localStorage.');
 
-      const doc = new jsPDF();
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
 
-      // Use PNG version of Google logo
-      const logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png";
+    // Convert logo to base64
+    const logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png";
+    const logoBase64 = await convertImgToBase64(logoUrl);
 
-      // To use an image URL in jsPDF, we need to convert it to base64 asynchronously
-      // So we create a helper to convert image URL to base64 then generate the PDF
+    // Add logo top-left
+    doc.addImage(logoBase64, 'PNG', 15, 15, 80, 25);
 
-      convertImgToBase64(logoUrl, function(base64Img) {
-        doc.addImage(base64Img, "PNG", 15, 10, 40, 12);
+    // Add Company name top-right
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor("#1a73e8");
+    doc.text("Google LLC", pageWidth - 15, 30, { align: "right" });
 
-        doc.setFont("Helvetica");
-        doc.setFontSize(18);
-        doc.setTextColor(33, 33, 33);
-        doc.text("Payment Invoice", 105, 25, { align: "center" });
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor("#5f6368");
+    doc.text("1600 Amphitheatre Parkway", pageWidth - 15, 36, { align: "right" });
+    doc.text("Mountain View, CA 94043", pageWidth - 15, 42, { align: "right" });
+    doc.text("USA", pageWidth - 15, 48, { align: "right" });
+    doc.text("Tax ID: 12-3456789", pageWidth - 15, 54, { align: "right" });
 
+    // Title - center
+    doc.setFontSize(18);
+    doc.setTextColor("#202124");
+    doc.setFont("helvetica", "bold");
+    doc.text("Payment Invoice", pageWidth / 2, 60, { align: "center" });
+
+    // Invoice details block
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor("#3c4043");
+    doc.text(`Invoice Number: ${data.orderId}`, 15, 75);
+    doc.text(`Invoice Date: ${new Date(data.date).toLocaleDateString()}`, 15, 83);
+    doc.text(`Billed To:`, 15, 95);
+    doc.setFont("helvetica", "bold");
+    doc.text(data.email, 15, 103);
+
+    // Table columns & data preparation
+    const columns = [
+      { header: 'Description', dataKey: 'name' },
+      { header: 'Quantity', dataKey: 'quantity' },
+      { header: 'Unit Price (USD)', dataKey: 'price' },
+      { header: 'Amount (USD)', dataKey: 'amount' }
+    ];
+
+    const rows = data.items.map(item => ({
+      name: item.name,
+      quantity: item.quantity || 1,
+      price: `$${item.price.toFixed(2)}`,
+      amount: `$${(item.price * (item.quantity || 1)).toFixed(2)}`
+    }));
+
+    // Calculate totals
+    const subtotal = rows.reduce((acc, r) => acc + parseFloat(r.amount.replace('$', '')), 0);
+    const taxRate = 0.18;
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
+
+    // Draw the items table
+    doc.autoTable({
+      startY: 110,
+      head: [columns.map(c => c.header)],
+      body: rows.map(r => [r.name, r.quantity.toString(), r.price, r.amount]),
+      styles: { fontSize: 11, cellPadding: 4 },
+      headStyles: { fillColor: "#1a73e8", textColor: 255, fontStyle: 'bold' },
+      footStyles: { fillColor: "#e8f0fe" },
+      theme: 'grid',
+      margin: { left: 15, right: 15 },
+      didDrawPage: (dataArg) => {
+        const finalY = dataArg.cursor.y + 10;
+        const rightColX = pageWidth - 15;
+
+        // Totals block right aligned
         doc.setFontSize(12);
-        doc.setTextColor(0);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor("#202124");
+        doc.text("Subtotal:", rightColX - 40, finalY);
+        doc.text(`$${subtotal.toFixed(2)}`, rightColX, finalY, { align: "right" });
 
-        // Invoice Header
-        doc.text(`Invoice Date: ${new Date(data.date).toLocaleDateString()}`, 15, 40);
-        doc.text(`Order ID: ${data.orderId}`, 15, 48);
-        doc.text(`Billed To: ${data.email}`, 15, 56);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Tax (18%):`, rightColX - 40, finalY + 8);
+        doc.text(`$${tax.toFixed(2)}`, rightColX, finalY + 8, { align: "right" });
 
-        // Item Table Header
-        let y = 70;
-        doc.setDrawColor(200);
-        doc.setLineWidth(0.5);
-        doc.line(15, y - 6, 195, y - 6);
+        doc.setFont("helvetica", "bold");
+        doc.text("Total:", rightColX - 30, finalY + 15);
+        doc.text(`$${total.toFixed(2)}`, rightColX, finalY + 15, { align: "right" });
 
-        doc.setFont(undefined, "bold");
-        doc.text("Item Description", 15, y);
-        doc.text("Amount (USD)", 180, y, { align: "right" });
-
-        doc.setFont(undefined, "normal");
-        y += 10;
-
-        // Table Rows
-        data.items.forEach(item => {
-          doc.text(item.name, 15, y);
-          doc.text(`$${item.price.toFixed(2)}`, 180, y, { align: "right" });
-          y += 8;
-        });
-
-        // Total
-        doc.setFont(undefined, "bold");
-        doc.text("Total", 15, y + 6);
-        doc.text(`$${data.total}`, 180, y + 6, { align: "right" });
-
-        y += 20;
-
-        // Footer Info
+        // Payment instructions below totals
         doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text("This invoice is generated for your payment made through Google services.", 15, y);
-        y += 6;
-        doc.text("Please retain this document for your records. For any disputes, contact support within 7 days.", 15, y);
-        y += 6;
-        doc.text("For support: https://support.google.com", 15, y);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor("#5f6368");
+        const paymentY = finalY + 60;
+        const leftMargin = 15;
+        doc.text("Payment Instructions:", leftMargin, paymentY);
+        doc.text("Please make payment within 15 days of invoice date.", leftMargin, paymentY + 5);
+        doc.text("Accepted payment methods: Credit Card, Bank Transfer, Google Pay.", leftMargin, paymentY + 15);
 
-        y += 12;
-        doc.text("Google LLC", 15, y);
-        doc.text("1600 Amphitheatre Parkway, Mountain View, CA 94043, USA", 15, y + 6);
-        doc.text("Tax ID: 123-456789", 15, y + 12);
+        // Support contact info
+        doc.text("For questions or support:Email: support@google.com | Phone: +1 (800) 123-4567", leftMargin, paymentY + 20);
+        doc.text("Email: support@google.com | Phone: +1 (800) 123-4567", leftMargin, paymentY + 10);
 
-        doc.save("Google_Invoice.pdf");
-      });
-    }
-
-    // Helper: Convert image URL to base64 for jsPDF
-    function convertImgToBase64(url, callback, outputFormat){
-      var img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.onload = function(){
-        var canvas = document.createElement('canvas');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(this, 0, 0);
-        var dataURL = canvas.toDataURL(outputFormat || 'image/png');
-        callback(dataURL);
-      };
-      img.onerror = function() {
-        alert('Failed to load logo image for invoice.');
+        // Footer note
+        const footerY = doc.internal.pageSize.getHeight() - 20;
+        doc.setFontSize(9);
+        doc.setTextColor("#70757a");
+        doc.text("This invoice is computer generated and does not require a signature.", pageWidth / 2, footerY, { align: "center" });
       }
+    });
+
+    // Save PDF file
+    doc.save(`Google_Invoice_${data.orderId}.pdf`);
+  }
+
+  // Convert image URL to base64 for jsPDF
+  function convertImgToBase64(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.onerror = () => reject(new Error("Could not load image at " + url));
       img.src = url;
-    }
-  </script>
+    });
+  }
+</script>
+
 </body>
 </html>
