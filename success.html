@@ -63,45 +63,76 @@
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    const { jsPDF } = window.jspdf;
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const { jsPDF } = window.jspdf;
 
-    function downloadInvoice() {
-      const data = JSON.parse(localStorage.getItem("invoice"));
-      if (!data) return alert("Invoice data not found");
+  function downloadInvoice() {
+    const data = JSON.parse(localStorage.getItem("invoice"));
+    if (!data) return alert("Invoice data not found");
 
-      const doc = new jsPDF();
-      doc.setFont("Helvetica");
-      doc.setFontSize(18);
-      doc.setTextColor(66, 133, 244);
-      doc.text("Google Payment Invoice", 60, 20);
+    const doc = new jsPDF();
 
-      doc.setFontSize(12);
-      doc.setTextColor(0);
-      doc.text(`Invoice Date: ${new Date(data.date).toLocaleDateString()}`, 20, 40);
-      doc.text(`Billed To: ${data.email}`, 20, 50);
-      doc.text(`Order ID: ${data.orderId}`, 20, 60);
+    // Google Logo
+    doc.addImage("https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg", "PNG", 15, 10, 40, 12);
 
-      let y = 80;
-      doc.setFont(undefined, 'bold');
-      doc.text("Item", 20, y);
-      doc.text("Amount (USD)", 150, y);
-      doc.setFont(undefined, 'normal');
+    doc.setFont("Helvetica");
+    doc.setFontSize(18);
+    doc.setTextColor(33, 33, 33);
+    doc.text("Payment Invoice", 105, 25, { align: "center" });
 
-      y += 10;
-      data.items.forEach(item => {
-        doc.text(item.name, 20, y);
-        doc.text(`$${item.price.toFixed(2)}`, 150, y, { align: "right" });
-        y += 10;
-      });
+    doc.setFontSize(12);
+    doc.setTextColor(0);
 
-      doc.setFont(undefined, 'bold');
-      doc.text("Total", 20, y + 10);
-      doc.text(`$${data.total}`, 150, y + 10, { align: "right" });
+    // Invoice Header
+    doc.text(`Invoice Date: ${new Date(data.date).toLocaleDateString()}`, 15, 40);
+    doc.text(`Order ID: ${data.orderId}`, 15, 48);
+    doc.text(`Billed To: ${data.email}`, 15, 56);
 
-      doc.save("Google_Invoice.pdf");
-    }
-  </script>
+    // Item Table Header
+    let y = 70;
+    doc.setDrawColor(200);
+    doc.setLineWidth(0.5);
+    doc.line(15, y - 6, 195, y - 6);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Item Description", 15, y);
+    doc.text("Amount (USD)", 180, y, { align: "right" });
+
+    doc.setFont(undefined, "normal");
+    y += 10;
+
+    // Table Rows
+    data.items.forEach(item => {
+      doc.text(item.name, 15, y);
+      doc.text(`$${item.price.toFixed(2)}`, 180, y, { align: "right" });
+      y += 8;
+    });
+
+    // Total
+    doc.setFont(undefined, "bold");
+    doc.text("Total", 15, y + 6);
+    doc.text(`$${data.total}`, 180, y + 6, { align: "right" });
+
+    y += 20;
+
+    // Footer Info
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text("This invoice is generated for your payment made through Google services.", 15, y);
+    y += 6;
+    doc.text("Please retain this document for your records. For any disputes, contact support within 7 days.", 15, y);
+    y += 6;
+    doc.text("For support: https://support.google.com", 15, y);
+
+    y += 12;
+    doc.text("Google LLC", 15, y);
+    doc.text("1600 Amphitheatre Parkway, Mountain View, CA 94043, USA", 15, y + 6);
+    doc.text("Tax ID: 123-456789", 15, y + 12);
+
+    doc.save("Google_Invoice.pdf");
+  }
+</script>
+
 </body>
 </html>
