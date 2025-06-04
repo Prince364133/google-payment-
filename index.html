@@ -205,7 +205,8 @@
       <img src="matercard.png" alt="Mastercard">
     </div>
 
-    <button class="pay-btn">Pay with UPI / Google Pay</button>
+    <button class="pay-btn" onclick="simulatePayment()">Pay with UPI / Google Pay</button>
+
 
     <div class="support">
       Having issues? <a href="#">Contact Google Cloud Billing Support</a>
@@ -222,6 +223,10 @@
   </div>
 
   <script>
+    function simulatePayment() {
+  window.location.href = "success.html"; // create this HTML page below
+}
+
     let total = 2.00;
 
     function togglePopup() {
